@@ -22,109 +22,135 @@ Repository ini berisi rangkuman materi **Basis Data Part 9** sekaligus praktik l
 
 ---
 
-## 🧪 Praktikum Menggunakan OpenRefine
+## 🧪 Praktikum Menggunakan OpenRefine (Praktik Langsung + Kode)
 
-### 1. Loading File dan Membuat Project
+Pada bagian ini, praktikum dilakukan menggunakan contoh data sederhana agar mudah dipahami.
 
-1. Buka aplikasi **OpenRefine**
+---
+
+### 1. Contoh Dataset (sample-file.csv)
+
+Berikut contoh isi file `sample-file.csv` yang digunakan dalam praktikum:
+
+```csv
+id,name_of_person
+1,alex castillo
+2,Alex Castillo 
+3,Alexander
+4,alex castillooooooo
+5,  alex castillo
+```
+
+Masalah pada data di atas:
+
+* Perbedaan huruf besar/kecil
+* Spasi di awal dan akhir teks
+* Penulisan nama tidak konsisten
+
+---
+
+### 2. Loading File dan Membuat Project
+
+1. Buka **OpenRefine**
 2. Klik **Create Project**
 3. Pilih file `sample-file.csv`
-4. Klik **Next** lalu **Create Project**
+4. Klik **Next** → **Create Project**
 
-Setelah itu, data akan ditampilkan dalam bentuk tabel.
+Data akan muncul dalam bentuk tabel.
 
 ---
 
-### 2. Examining Data (Pemeriksaan Data)
+### 3. Examining Data (Text Facet)
 
-* Klik tanda panah pada kolom **Name of Person**
+* Klik panah pada kolom `name_of_person`
 * Pilih **Facet → Text Facet**
 
-Fitur ini menampilkan seluruh variasi data pada kolom nama. Pada tahap ini akan terlihat banyak data yang tidak konsisten, misalnya:
-
-* Alex Castillo
-* Alexander
-* Alexander Castillo
-* Alex Castillooooooo
-
-Secara logika manusia, ini adalah orang yang sama, namun komputer menganggapnya berbeda.
+Fungsi ini menampilkan seluruh variasi nilai pada kolom tersebut.
 
 ---
 
-### 3. Removing Whitespace (Menghapus Spasi Berlebih)
+### 4. Removing Whitespace (Praktik)
 
-Masalah umum lainnya adalah spasi di awal atau akhir teks.
+Langkah manual:
 
-Langkah-langkah:
+* Klik panah kolom `name_of_person`
+* **Edit Cells → Common Transformations → Trim leading and trailing whitespace**
 
-1. Klik panah pada kolom **Name of Person**
-2. Pilih **Edit Cells**
-3. Pilih **Common Transformations**
-4. Klik **Trim leading and trailing whitespace**
+Alternatif menggunakan **GREL**:
 
-Langkah ini akan menghapus spasi yang menyebabkan data dianggap berbeda.
+```grel
+value.trim()
+```
+
+Hasil: spasi di awal dan akhir teks akan dihapus.
 
 ---
 
-### 4. Changing the Case (Mengubah Format Huruf)
+### 5. Changing Case ke Title Case
 
-Untuk menyeragamkan penulisan nama:
+Langkah manual:
 
-1. Klik panah pada kolom **Name of Person**
-2. Pilih **Edit Cells**
-3. Pilih **Common Transformations**
-4. Klik **To Titlecase**
+* **Edit Cells → Common Transformations → To Titlecase**
+
+Menggunakan GREL:
+
+```grel
+toTitlecase(value)
+```
 
 Contoh hasil:
 
-* alex castillo → Alex Castillo
+* `alex castillo` → `Alex Castillo`
 
 ---
 
-### 5. Cleaning dengan Cluster and Edit
-
-Fitur **Cluster & Edit** digunakan untuk menggabungkan data yang mirip.
-
-Langkah:
+### 6. Cleaning dengan Cluster and Edit
 
 1. Pada Text Facet, klik **Cluster**
-2. OpenRefine akan menampilkan beberapa grup data mirip
+2. Pilih algoritma (misalnya *key collision*)
 3. Centang kolom **Merge?**
-4. Tentukan nama yang benar di kolom **New Cell Value**
+4. Isi nilai benar pada kolom **New Cell Value**, contoh:
+
+```
+Alex Castillo
+```
+
 5. Klik **Merge Selected & Recluster**
 
-Semua variasi nama akan digabung menjadi satu nilai yang benar.
-
----
-
-### 6. Algorithm Settings
-
-OpenRefine menyediakan beberapa algoritma clustering (misalnya:
-
-* key collision
-* nearest neighbor)
-
-Pengaturan algoritma ini membantu menemukan data yang mirip dengan tingkat akurasi berbeda.
+Semua variasi nama akan digabung menjadi satu.
 
 ---
 
 ### 7. Cleaning Individual Entries (Edit Manual)
 
-Jika masih ada data yang tidak bisa digabung otomatis:
+Jika masih ada data tidak sesuai:
 
 * Klik **Edit** pada nilai di Text Facet
-* Ubah nama secara manual sesuai yang benar
+* Ubah langsung menjadi nilai yang benar
 
 ---
 
-### 8. Exporting Cleaned Data
+### 8. Hasil Data Setelah Cleaning
 
-Setelah data bersih:
+Contoh hasil akhir data:
 
-1. Klik **Export** di bagian atas
+```csv
+id,name_of_person
+1,Alex Castillo
+2,Alex Castillo
+3,Alex Castillo
+4,Alex Castillo
+5,Alex Castillo
+```
+
+---
+
+### 9. Exporting Cleaned Data
+
+1. Klik **Export**
 2. Pilih **Comma Separated Value (CSV)**
 
-File CSV hasil export siap digunakan untuk analisis data lanjutan atau diimpor ke database.
+File hasil export siap digunakan untuk analisis lanjutan atau disimpan ke database.
 
 ---
 
